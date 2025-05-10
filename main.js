@@ -1,13 +1,11 @@
-let colleges = []; // Will hold the parsed Excel data
+let colleges = []; // Will be loaded from JSON
 
-// Parse cutoff string to extract the lowest cutoff number
 function parseCutoff(cutoffStr) {
   if (!cutoffStr) return null;
   const match = cutoffStr.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;
 }
 
-// Render the filtered college table
 function renderTable(collegesList) {
   const tbody = document.getElementById('collegesBody');
   tbody.innerHTML = '';
@@ -25,7 +23,6 @@ function renderTable(collegesList) {
   document.getElementById('collegesTable').style.display = collegesList.length ? '' : 'none';
 }
 
-// Filter colleges based on score and show results
 function filterColleges() {
   const score = parseInt(document.getElementById('scoreInput').value, 10);
   if (isNaN(score)) {
@@ -46,7 +43,6 @@ function filterColleges() {
   renderTable(filtered);
 }
 
-// Show all details of a college in a modal
 function showDetails(idx) {
   const score = parseInt(document.getElementById('scoreInput').value, 10);
   const filtered = colleges
@@ -66,7 +62,7 @@ function showDetails(idx) {
   document.getElementById('modalDetails').innerHTML = html;
   document.getElementById('modal').style.display = 'flex';
 }
-window.showDetails = showDetails; // Make it global for inline onclick
+window.showDetails = showDetails;
 
 document.getElementById('closeModal').onclick = function() {
   document.getElementById('modal').style.display = 'none';
@@ -74,15 +70,13 @@ document.getElementById('closeModal').onclick = function() {
 
 document.getElementById('findBtn').onclick = filterColleges;
 
-// Excel file upload and parsing
-document.getElementById('excelFile').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  readXlsxFile(file).then((rows) => {
-    const headers = rows[0];
-    colleges = rows.slice(1).map(row =>
-      Object.fromEntries(row.map((cell, i) => [headers[i], cell]))
-    );
-    alert('Excel file loaded! Enter your score and click "Find Colleges".');
+// Fetch the JSON data on page load
+fetch('colleges.json')
+  .then(response => response.json())
+  .then(data => {
+    colleges = data;
+  })
+  .catch(err => {
+    alert('Failed to load college data!');
+    console.error(err);
   });
-});
