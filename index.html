@@ -3,31 +3,340 @@
 <head>
   <meta charset="UTF-8">
   <title>CUET College Finder</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+  <style>
+    :root {
+      --primary: #2a73cc;
+      --secondary: #f4f8fb;
+      --accent: #f9d923;
+      --danger: #e63946;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(42,115,204,0.08);
+      --font-main: 'Inter', Arial, sans-serif;
+    }
+    body {
+      font-family: var(--font-main);
+      margin: 0; background: var(--secondary); color: #222;
+    }
+    header {
+      background: linear-gradient(90deg, #2a73cc 60%, #6a82fb 100%);
+      padding: 24px 0 12px 0;
+      color: #fff;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .logo {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 2rem; font-weight: 700; letter-spacing: 1px;
+    }
+    .logo img {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #fff; padding: 4px;
+    }
+    .hero {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      padding: 32px 16px 16px 16px;
+      gap: 40px;
+      background: var(--secondary);
+    }
+    .hero-text {
+      max-width: 500px;
+    }
+    .hero-text h1 {
+      font-size: 2.5rem; font-weight: 700; margin: 0 0 16px 0;
+      color: var(--primary);
+    }
+    .hero-text p {
+      font-size: 1.2rem; color: #444; margin: 0 0 24px 0;
+    }
+    .hero-graphic img {
+      width: 320px; max-width: 90vw;
+    }
+    .finder-box {
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      max-width: 600px;
+      margin: -48px auto 32px auto;
+      position: relative;
+      z-index: 1;
+    }
+    .finder-box label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #222;
+    }
+    .finder-box input[type="number"] {
+      padding: 10px 14px;
+      border: 1.5px solid #c3dafe;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      margin-right: 12px;
+      width: 120px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .finder-box input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+    .finder-box button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .finder-box button:hover {
+      background: #1e5bb8;
+    }
+    .results-count {
+      text-align: center;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      padding: 0 16px 48px 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .college-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 22px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: transform 0.12s, box-shadow 0.12s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .college-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(42,115,204,0.12);
+      border-color: var(--primary);
+    }
+    .college-card h3 {
+      margin: 0 0 6px 0;
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .college-card .meta {
+      font-size: 1rem; color: #555;
+      display: flex; flex-wrap: wrap; gap: 12px;
+      align-items: center;
+    }
+    .college-card .cutoff {
+      background: #e3f0ff;
+      color: #2a73cc;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.98rem;
+      margin-left: 8px;
+      display: inline-block;
+    }
+    .college-card .details-btn {
+      margin-top: 12px;
+      align-self: flex-start;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .college-card .details-btn:hover {
+      background: #1e5bb8;
+    }
+    /* Modal styling */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(42, 115, 204, 0.12);
+      align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    #modal .modal-content {
+      background: #fff;
+      padding: 32px 28px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(42,115,204,0.18);
+      max-width: 540px;
+      width: 95vw;
+      position: relative;
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.96);} to { opacity: 1; transform: scale(1);} }
+    #modal .close-btn {
+      position: absolute; top: 16px; right: 18px;
+      font-size: 2rem; color: #aaa; cursor: pointer;
+      transition: color 0.2s;
+    }
+    #modal .close-btn:hover { color: var(--primary);}
+    #modal h2 { margin-top: 0; color: var(--primary);}
+    #modal ul { padding-left: 18px; }
+    #modal li { margin-bottom: 6px; }
+    /* Responsive tweaks */
+    @media (max-width: 700px) {
+      .hero { flex-direction: column; gap: 16px; }
+      .hero-graphic img { width: 90vw; }
+      .finder-box { padding: 18px 8px; }
+      .cards-grid { padding: 0 2vw 32px 2vw; }
+    }
+  </style>
 </head>
 <body>
-  <h1>CUET College Finder</h1>
-  <label>Enter your CUET-PG Score: <input type="number" id="scoreInput" min="0" max="1000"></label>
-  <button id="findBtn">Find Colleges</button>
-  <div id="resultsCount"></div>
-  <table id="collegesTable" style="display:none;">
-    <thead>
-      <tr>
-        <th>College Name</th>
-        <th>Course Type</th>
-        <th>Specialization</th>
-        <th>Location</th>
-        <th>CUET-PG Cutoff</th>
-      </tr>
-    </thead>
-    <tbody id="collegesBody"></tbody>
-  </table>
-  <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
-    <div style="background:#fff; padding:24px; border-radius:8px; max-width:600px; margin:auto; position:relative;">
-      <span id="closeModal" style="position:absolute; top:5px; right:10px; cursor:pointer; font-size:1.5em;">&times;</span>
+  <header>
+    <div class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
+      CUET College Finder
+    </div>
+  </header>
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Find Your Best Fit College</h1>
+      <p>Enter your CUET-PG score and instantly discover top colleges you’re eligible for.<br>
+      Compare cutoffs, specializations, and more-all in a beautiful, easy-to-use interface inspired by leading platforms like Coursera.</p>
+    </div>
+    <div class="hero-graphic">
+      <!-- Use an open-source illustration or SVG for a Coursera-style look -->
+      <img src="https://undraw.co/api/illustrations/svg?color=2a73cc&illustration=graduation" alt="Graduation Illustration" onerror="this.src='https://undraw.co/static/images/undraw_graduation.svg'">
+    </div>
+  </section>
+  <section class="finder-box">
+    <form id="finderForm" autocomplete="off">
+      <label for="scoreInput">Your CUET-PG Score:</label>
+      <input type="number" id="scoreInput" min="0" max="1000" placeholder="e.g. 210" required>
+      <button type="submit">Find Colleges</button>
+    </form>
+  </section>
+  <div class="results-count" id="resultsCount"></div>
+  <div class="cards-grid" id="cardsGrid"></div>
+  <div id="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
       <div id="modalDetails"></div>
     </div>
   </div>
-  <script src="main.js"></script>
+  <footer style="text-align:center; color:#888; font-size:1rem; padding:32px 0 12px 0;">
+    <span>&copy; 2025 CUET College Finder. Inspired by Coursera’s design.</span>
+  </footer>
+  <script>
+    let colleges = [];
+    let lastFiltered = [];
+
+    function parseCutoff(cutoffStr) {
+      if (!cutoffStr) return null;
+      const match = cutoffStr.match(/\d+/);
+      return match ? parseInt(match[0], 10) : null;
+    }
+
+    function renderCards(collegesList) {
+      lastFiltered = collegesList;
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = '';
+      if (collegesList.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;font-size:1.1rem;">No colleges found for this score.</div>`;
+        return;
+      }
+      collegesList.forEach((college, idx) => {
+        const card = document.createElement('div');
+        card.className = 'college-card';
+        card.innerHTML = `
+          <h3>${college['College Name']}</h3>
+          <div class="meta">
+            <span><svg width="18" height="18" fill="none" style="vertical-align:middle;margin-right:2px;"><circle cx="9" cy="9" r="8" stroke="#2a73cc" stroke-width="2"/><path d="M6 10l2 2 4-4" stroke="#2a73cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ${college['Course Type']}</span>
+            <span><svg width="18" height="18" fill="none" style="vertical-align:middle;margin-right:2px;"><rect x="3" y="3" width="12" height="12" rx="3" stroke="#2a73cc" stroke-width="2"/><path d="M6 9h6" stroke="#2a73cc" stroke-width="2" stroke-linecap="round"/></svg> ${college['Specialization']}</span>
+            <span><svg width="18" height="18" fill="none" style="vertical-align:middle;margin-right:2px;"><path d="M9 2a7 7 0 0 1 7 7c0 5-7 9-7 9S2 14 2 9a7 7 0 0 1 7-7z" stroke="#2a73cc" stroke-width="2"/><circle cx="9" cy="9" r="2" stroke="#2a73cc" stroke-width="2"/></svg> ${college['Location (City, State)']}</span>
+          </div>
+          <div>
+            <span class="cutoff" title="General Category Cutoff">Cutoff: ${college['2024 CUET-PG Cutoff (Gen)'] || 'N/A'}</span>
+          </div>
+          <button class="details-btn" data-idx="${idx}">View Details</button>
+        `;
+        grid.appendChild(card);
+      });
+      // Attach event listeners for all details buttons
+      document.querySelectorAll('.details-btn').forEach(btn => {
+        btn.onclick = function() {
+          showDetails(parseInt(this.getAttribute('data-idx')));
+        }
+      });
+    }
+
+    function filterColleges(score) {
+      return colleges
+        .filter(college =>
+          college['Admission Process'] === "CUET-PG" &&
+          parseCutoff(college['2024 CUET-PG Cutoff (Gen)']) !== null &&
+          score >= parseCutoff(college['2024 CUET-PG Cutoff (Gen)'])
+        )
+        .sort((a, b) => parseCutoff(b['2024 CUET-PG Cutoff (Gen)']) - parseCutoff(a['2024 CUET-PG Cutoff (Gen)']));
+    }
+
+    function showDetails(idx) {
+      const college = lastFiltered[idx];
+      if (!college) return;
+      let html = `<h2>${college['College Name']}</h2><ul>`;
+      for (const key in college) {
+        html += `<li><strong>${key}:</strong> ${college[key]}</li>`;
+      }
+      html += `</ul>`;
+      document.getElementById('modalDetails').innerHTML = html;
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    document.getElementById('closeModal').onclick = function() {
+      document.getElementById('modal').style.display = 'none';
+    };
+
+    document.getElementById('finderForm').onsubmit = function(e) {
+      e.preventDefault();
+      const score = parseInt(document.getElementById('scoreInput').value, 10);
+      if (isNaN(score)) {
+        document.getElementById('resultsCount').textContent = '';
+        renderCards([]);
+        return;
+      }
+      const filtered = filterColleges(score);
+      document.getElementById('resultsCount').textContent =
+        `Showing ${filtered.length} colleges for CUET-PG score ${score}`;
+      renderCards(filtered);
+    };
+
+    // Fetch the JSON data on page load
+    fetch('PG-Colleges.json')
+      .then(response => response.json())
+      .then(data => {
+        colleges = data;
+        // Optionally, render all or none at start
+        renderCards([]);
+      })
+      .catch(err => {
+        document.getElementById('cardsGrid').innerHTML = `<div style="color:#e63946;font-weight:600;text-align:center;">Failed to load college data. Please check PG-Colleges.json.</div>`;
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
