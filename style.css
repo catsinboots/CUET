@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+input, button { padding: 6px; font-size: 1em; }
+table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background: #f4f4f4; }
+tr:hover { background: #f9f9f9; }
+a { color: #0074d9; text-decoration: underline; cursor: pointer; }
