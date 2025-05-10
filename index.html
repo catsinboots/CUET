@@ -11,131 +11,153 @@
     :root {
       --np-orange: #ff5a00;
       --np-dark: #222;
-      --np-light: #f9f9f9;
       --np-gray: #666;
       --np-border: #eaeaea;
+      --max-width: 900px;
     }
     html, body {
-      height: 100%;
       margin: 0;
       padding: 0;
-      background: var(--np-light);
-    }
-    body {
-      font-family: 'Open Sans', Arial, sans-serif;
+      background: #fff;
       color: var(--np-dark);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Open Sans', Arial, sans-serif;
+      min-height: 100%;
     }
     header {
       width: 100%;
-      background: #fff;
+      padding: 36px 0 18px 0;
       border-bottom: 1px solid var(--np-border);
-      padding: 32px 0 24px 0;
-      text-align: center;
+      margin-bottom: 0;
     }
     .logo {
       font-family: 'Montserrat', Arial, sans-serif;
       color: var(--np-orange);
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 900;
       letter-spacing: 2px;
       text-transform: uppercase;
+      margin-left: 7vw;
       display: inline-block;
-      line-height: 1;
       user-select: none;
     }
     main {
-      flex: 1;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 64px 24px 0 24px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      margin-top: 40px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-      padding: 48px 38px 40px 38px;
-      max-width: 420px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
     h1 {
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 900;
-      font-size: 2.1rem;
-      margin: 0 0 16px 0;
+      font-size: 3.2rem;
       color: var(--np-dark);
-      letter-spacing: 0.5px;
-      text-align: center;
+      letter-spacing: 1px;
+      margin: 0 0 18px 0;
+      line-height: 1.08;
+      text-transform: uppercase;
     }
     p {
       font-family: 'Open Sans', Arial, sans-serif;
-      font-size: 1.09rem;
+      font-size: 1.25rem;
       color: var(--np-gray);
-      margin-bottom: 32px;
-      text-align: center;
+      margin: 0 0 38px 0;
       line-height: 1.6;
+      max-width: 600px;
     }
     form {
       width: 100%;
+      max-width: 500px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-direction: row;
+      gap: 16px;
+      margin-bottom: 0;
     }
     input[type="number"] {
+      flex: 1;
       font-family: 'Open Sans', Arial, sans-serif;
-      width: 100%;
-      max-width: 320px;
-      padding: 16px 14px;
-      font-size: 1.15rem;
+      padding: 18px 14px;
+      font-size: 1.18rem;
       border: 1.5px solid var(--np-border);
-      border-radius: 7px;
-      margin-bottom: 28px;
+      border-radius: 0;
       outline: none;
+      background: #fff;
+      color: var(--np-dark);
       transition: border-color 0.2s;
-      background: #fafafa;
+      margin: 0;
     }
     input[type="number"]:focus {
       border-color: var(--np-orange);
-      background: #fff;
     }
     button {
-      width: 100%;
-      max-width: 320px;
-      padding: 17px 0;
+      padding: 0 38px;
       background: var(--np-orange);
       color: #fff;
       border: none;
-      border-radius: 7px;
+      border-radius: 0;
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 700;
-      font-size: 1.08rem;
+      font-size: 1.1rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(255,90,0,0.07);
       transition: background 0.18s;
+      height: 56px;
+      align-self: stretch;
+      box-shadow: none;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     button:hover {
       background: #e04b00;
     }
+    @media (max-width: 800px) {
+      h1 {
+        font-size: 2.1rem;
+      }
+      main {
+        padding-top: 38px;
+      }
+      .logo {
+        font-size: 2rem;
+        margin-left: 5vw;
+      }
+    }
     @media (max-width: 600px) {
-      .card {
-        padding: 28px 8px 28px 8px;
-        margin: 0 4px;
+      .logo {
+        margin-left: 4vw;
+        font-size: 1.5rem;
+      }
+      main {
+        align-items: center;
+        padding-top: 30px;
       }
       h1 {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
+        text-align: center;
       }
-      input[type="number"], button {
-        max-width: 100%;
+      p {
         font-size: 1rem;
+        text-align: center;
+      }
+      form {
+        flex-direction: column;
+        gap: 12px;
+        max-width: 100%;
+      }
+      button {
+        width: 100%;
+        padding: 16px 0;
+        font-size: 1rem;
+        height: 48px;
+      }
+      input[type="number"] {
+        padding: 14px 10px;
+        font-size: 1rem;
+        height: 48px;
       }
     }
   </style>
@@ -145,14 +167,14 @@
     <span class="logo">YourBrand</span>
   </header>
   <main>
-    <div class="card">
-      <h1>Step 1: Enter Your CUET PG Score</h1>
-      <p>Let’s get started! Enter your CUET PG score below so we can personalize your experience and recommendations.</p>
-      <form>
-        <input type="number" name="cuet_score" placeholder="Your CUET PG Score" min="0" max="1000" required>
-        <button type="submit">Continue</button>
-      </form>
-    </div>
+    <h1>Step 1: Enter Your CUET PG Score</h1>
+    <p>
+      Let’s get started. Enter your CUET PG score below and we’ll personalize your recommendations instantly.
+    </p>
+    <form>
+      <input type="number" name="cuet_score" placeholder="Your CUET PG Score" min="0" max="1000" required>
+      <button type="submit">Continue</button>
+    </form>
   </main>
 </body>
 </html>
