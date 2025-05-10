@@ -71,7 +71,7 @@ document.getElementById('closeModal').onclick = function() {
 document.getElementById('findBtn').onclick = filterColleges;
 
 // Fetch the JSON data on page load
-fetch('colleges.json')
+fetch('PG-Colleges.json')
   .then(response => response.json())
   .then(data => {
     colleges = data;
