@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CUET Score College Finder</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button, select { padding: 6px; font-size: 1em; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr:hover { background: #f9f9f9; }
+    .college-details { display: none; border: 1px solid #aaa; background: #fff; padding: 16px; margin-top: 10px; }
+    .modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background: #fff; padding: 24px; border-radius: 8px; width: 90%; max-width: 600px; }
+    .close-btn { float: right; cursor: pointer; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>CUET Score College Finder</h1>
+  <label for="scoreInput">Enter your CUET-PG Score:</label>
+  <input type="number" id="scoreInput" min="0" max="1000" placeholder="e.g. 210">
+  <button onclick="filterColleges()">Find Colleges</button>
+
+  <div id="resultsCount"></div>
+  <table id="collegesTable">
+    <thead>
+      <tr>
+        <th>College Name</th>
+        <th>Course</th>
+        <th>Specialization</th>
+        <th>Location</th>
+        <th>2024 CUET-PG Cutoff (Gen)</th>
+      </tr>
+    </thead>
+    <tbody id="collegesBody"></tbody>
+  </table>
+
+  <div id="modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalDetails"></div>
+    </div>
+  </div>
+
+<script>
+  // Paste your full college data array here
+  const colleges = [
+    {
+      name: "University of Delhi (DU)",
+      course: "MA",
+      specialization: "Clinical, Counselling",
+      location: "Delhi, Delhi",
+      collegeType: "Central",
+      process: "CUET-PG",
+      cutoff: "240–250+",
+      eligibility: "Psychology background preferred/required",
+      accreditation: "NAAC A+, NIRF Top 20",
+      fees: "10,000–20,000",
+      scholarships: "Yes",
+      placements: "Yes",
+      mode: "Regular",
+      facilities: "Labs, Library, Hostel",
+      batchSize: "Large",
+      peerReviews: "4.5/5",
+      why: "Top-ranked, historic, excellent faculty and placements"
+    },
+    {
+      name: "Jawaharlal Nehru University (JNU)",
+      course: "MA",
+      specialization: "General",
+      location: "Delhi, Delhi",
+      collegeType: "Central",
+      process: "CUET-PG",
+      cutoff: "230–240+",
+      eligibility: "Any discipline (preferred Psychology)",
+      accreditation: "NAAC A++, NIRF Top 10",
+      fees: "12,000–15,000",
+      scholarships: "Yes",
+      placements: "Yes",
+      mode: "Regular",
+      facilities: "Library, Hostel",
+      batchSize: "Medium",
+      peerReviews: "4.6/5",
+      why: "Nationally prestigious, research-driven, top faculty"
+    },
+    {
+      name: "Banaras Hindu University (BHU)",
+      course: "MA/MSc",
+      specialization: "Both",
+      location: "Varanasi, UP",
+      collegeType: "Central",
+      process: "CUET-PG",
+      cutoff: "220–230+",
+      eligibility: "Psychology background required",
+      accreditation: "NAAC A, NIRF Top 20",
+      fees: "8,000–15,000",
+      scholarships: "Yes",
+      placements: "Yes",
+      mode: "Regular",
+      facilities: "Labs, Library, Hostel",
+      batchSize: "Large",
+      peerReviews: "4.4/5",
+      why: "Historic, high NIRF ranking, diverse programs"
+    },
+    {
+      name: "University of Hyderabad",
+      course: "MSc",
+      specialization: "General",
+      location: "Hyderabad, Telangana",
+      collegeType: "Central",
+      process: "CUET-PG",
+      cutoff: "210–220+",
+      eligibility: "Any discipline (preferred Psychology)",
+      accreditation: "NAAC A, NIRF Top 10",
+      fees: "10,000–15,000",
+      scholarships: "Yes",
+      placements: "Yes",
+      mode: "Regular",
+      facilities: "Labs, Library, Hostel",
+      batchSize: "Medium",
+      peerReviews: "4.5/5",
+      why: "Top-10 NIRF, research-intensive, strong faculty"
+    },
+    {
+      name: "Central University of Punjab",
+      course: "MA",
+      specialization: "General",
+      location: "Bathinda, Punjab",
+      collegeType: "Central",
+      process: "CUET-PG",
+      cutoff: "180–190+",
+      eligibility: "Bachelor's in any discipline",
+      accreditation: "NAAC A",
+      fees: "12,000–15,000",
+      scholarships: "Yes",
+      placements: "Moderate",
+      mode: "Regular",
+      facilities: "Labs, Library",
+      batchSize: "Medium",
+      peerReviews: "4.0/5",
+      why: "Central university, affordable, modern campus"
+    },
+    // ... Add all other colleges here as per your full data array
+  ];
+
+  function parseCutoff(cutoffStr) {
+    // Extract the lowest number from cutoff string (e.g., "210–220+" => 210)
+    if (!cutoffStr) return null;
+    const match = cutoffStr.match(/\d+/);
+    return match ? parseInt(match[0], 10) : null;
+  }
+
+  function filterColleges() {
+    const score = parseInt(document.getElementById('scoreInput').value, 10);
+    if (isNaN(score)) {
+      document.getElementById('collegesBody').innerHTML = '';
+      document.getElementById('resultsCount').textContent = '';
+      return;
+    }
+    // Filter only colleges with CUET-PG process and a valid cutoff
+    const filtered = colleges
+      .filter(college =>
+        college.process === "CUET-PG" &&
+        parseCutoff(college.cutoff) !== null &&
+        score >= parseCutoff(college.cutoff)
+      )
+      .sort((a, b) => parseCutoff(b.cutoff) - parseCutoff(a.cutoff)); // Descending order
+
+    document.getElementById('resultsCount').textContent =
+      `Showing ${filtered.length} colleges for CUET-PG score ${score}`;
+
+    renderTable(filtered);
+  }
+
+  function renderTable(collegesList) {
+    const tbody = document.getElementById('collegesBody');
+    tbody.innerHTML = '';
+    collegesList.forEach((college, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><a href="#" onclick="showDetails(${idx});return false;">${college.name}</a></td>
+        <td>${college.course}</td>
+        <td>${college.specialization}</td>
+        <td>${college.location}</td>
+        <td>${college.cutoff}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function showDetails(idx) {
+    // Find the college in the current filtered list
+    const score = parseInt(document.getElementById('scoreInput').value, 10);
+    const filtered = colleges
+      .filter(college =>
+        college.process === "CUET-PG" &&
+        parseCutoff(college.cutoff) !== null &&
+        score >= parseCutoff(college.cutoff)
+      )
+      .sort((a, b) => parseCutoff(b.cutoff) - parseCutoff(a.cutoff));
+    const college = filtered[idx];
+    if (!college) return;
+    let html = `<h2>${college.name}</h2><ul>`;
+    for (const key in college) {
+      if (key !== "name") {
+        html += `<li><strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${college[key]}</li>`;
+      }
+    }
+    html += `</ul>`;
+    document.getElementById('modalDetails').innerHTML = html;
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+</script>
+</body>
+</html>
