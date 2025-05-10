@@ -3,88 +3,139 @@
 <head>
   <meta charset="UTF-8">
   <title>Step 1: Enter Your CUET PG Score</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts: Montserrat & Open Sans -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
-    /* Core Neil Patel-inspired styles */
-    body {
+    :root {
+      --np-orange: #ff5a00;
+      --np-dark: #222;
+      --np-light: #f9f9f9;
+      --np-gray: #666;
+      --np-border: #eaeaea;
+    }
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #fff;
-      color: #222;
-      line-height: 1.6;
+      padding: 0;
+      background: var(--np-light);
+    }
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      color: var(--np-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     header {
-      padding: 32px 0 16px 0;
-      text-align: center;
+      width: 100%;
       background: #fff;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--np-border);
+      padding: 32px 0 24px 0;
+      text-align: center;
     }
     .logo {
+      font-family: 'Montserrat', Arial, sans-serif;
+      color: var(--np-orange);
       font-size: 2.5rem;
-      font-weight: bold;
-      color: #ff5a00; /* Neil's signature orange */
+      font-weight: 900;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 8px;
       display: inline-block;
+      line-height: 1;
+      user-select: none;
     }
-    .container {
-      max-width: 480px;
-      margin: 48px auto;
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .card {
       background: #fff;
-      padding: 40px 32px;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      text-align: center;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      padding: 48px 38px 40px 38px;
+      max-width: 420px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 16px;
-      font-weight: bold;
-      color: #222;
-      letter-spacing: 1px;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 2.1rem;
+      margin: 0 0 16px 0;
+      color: var(--np-dark);
+      letter-spacing: 0.5px;
+      text-align: center;
     }
     p {
-      color: #666;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 1.09rem;
+      color: var(--np-gray);
       margin-bottom: 32px;
-      font-size: 1.1rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     input[type="number"] {
+      font-family: 'Open Sans', Arial, sans-serif;
       width: 100%;
-      padding: 14px;
-      font-size: 1.1rem;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin-bottom: 24px;
+      max-width: 320px;
+      padding: 16px 14px;
+      font-size: 1.15rem;
+      border: 1.5px solid var(--np-border);
+      border-radius: 7px;
+      margin-bottom: 28px;
       outline: none;
-      transition: border 0.2s;
+      transition: border-color 0.2s;
+      background: #fafafa;
     }
     input[type="number"]:focus {
-      border: 1.5px solid #ff5a00;
+      border-color: var(--np-orange);
+      background: #fff;
     }
     button {
       width: 100%;
-      padding: 14px;
-      background: #ff5a00;
+      max-width: 320px;
+      padding: 17px 0;
+      background: var(--np-orange);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
+      border-radius: 7px;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.08rem;
       letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(255,90,0,0.07);
+      transition: background 0.18s;
     }
     button:hover {
       background: #e04b00;
     }
     @media (max-width: 600px) {
-      .container {
-        padding: 24px 8px;
-        margin: 24px 8px;
+      .card {
+        padding: 28px 8px 28px 8px;
+        margin: 0 4px;
       }
       h1 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+      }
+      input[type="number"], button {
+        max-width: 100%;
+        font-size: 1rem;
       }
     }
   </style>
@@ -94,11 +145,11 @@
     <span class="logo">YourBrand</span>
   </header>
   <main>
-    <div class="container">
+    <div class="card">
       <h1>Step 1: Enter Your CUET PG Score</h1>
-      <p>Let’s get started! Please enter your CUET PG score to personalize your experience.</p>
+      <p>Let’s get started! Enter your CUET PG score below so we can personalize your experience and recommendations.</p>
       <form>
-        <input type="number" name="cuet_score" placeholder="Enter your CUET PG score" min="0" max="1000" required>
+        <input type="number" name="cuet_score" placeholder="Your CUET PG Score" min="0" max="1000" required>
         <button type="submit">Continue</button>
       </form>
     </div>
